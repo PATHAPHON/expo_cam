@@ -1,180 +1,225 @@
-import { Image } from 'expo-image';
-import { SymbolView } from 'expo-symbols';
-import { Platform, Pressable, ScrollView, StyleSheet } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React from 'react';
+import {
+  Linking,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 
-import { ExternalLink } from '@/components/external-link';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Collapsible } from '@/components/ui/collapsible';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-import { useTheme } from '@/hooks/use-theme';
-
-export default function TabTwoScreen() {
-  const safeAreaInsets = useSafeAreaInsets();
-  const insets = {
-    ...safeAreaInsets,
-    bottom: safeAreaInsets.bottom + BottomTabInset + Spacing.three,
+export default function ExploreScreen() {
+  const openClassroomUrl = () => {
+    Linking.openURL('https://tanapattara.github.io/react_native/week-09');
   };
-  const theme = useTheme();
-
-  const contentPlatformStyle = Platform.select({
-    android: {
-      paddingTop: insets.top,
-      paddingLeft: insets.left,
-      paddingRight: insets.right,
-      paddingBottom: insets.bottom,
-    },
-    web: {
-      paddingTop: Spacing.six,
-      paddingBottom: Spacing.four,
-    },
-  });
 
   return (
-    <ScrollView
-      style={[styles.scrollView, { backgroundColor: theme.background }]}
-      contentInset={insets}
-      contentContainerStyle={[styles.contentContainer, contentPlatformStyle]}>
-      <ThemedView style={styles.container}>
-        <ThemedView style={styles.titleContainer}>
-          <ThemedText type="subtitle">Explore</ThemedText>
-          <ThemedText style={styles.centerText} themeColor="textSecondary">
-            This starter app includes example{'\n'}code to help you get started.
-          </ThemedText>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Ionicons name="camera-outline" size={36} color="#3B82F6" />
+          <Text style={styles.headerTitle}>คู่มือใช้งาน & การส่งงาน</Text>
+          <Text style={styles.headerSubtitle}>
+            แอปพลิเคชันกล้องถ่ายรูปพร้อมระบบเลือกฟิลเตอร์แต่งรูป 3 รูปแบบ
+          </Text>
+        </View>
 
-          <ExternalLink href="https://docs.expo.dev" asChild>
-            <Pressable style={({ pressed }) => pressed && styles.pressed}>
-              <ThemedView type="backgroundElement" style={styles.linkButton}>
-                <ThemedText type="link">Expo documentation</ThemedText>
-                <SymbolView
-                  tintColor={theme.text}
-                  name={{ ios: 'arrow.up.right.square', android: 'link', web: 'link' }}
-                  size={12}
-                />
-              </ThemedView>
-            </Pressable>
-          </ExternalLink>
-        </ThemedView>
+        {/* Section 1: Features */}
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <Ionicons name="sparkles" size={20} color="#F59E0B" />
+            <Text style={styles.cardTitle}>ฟิลเตอร์แต่งรูป (3 รูปแบบ)</Text>
+          </View>
 
-        <ThemedView style={styles.sectionsWrapper}>
-          <Collapsible title="File-based routing">
-            <ThemedText type="small">
-              This app has two screens: <ThemedText type="code">src/app/index.tsx</ThemedText> and{' '}
-              <ThemedText type="code">src/app/explore.tsx</ThemedText>
-            </ThemedText>
-            <ThemedText type="small">
-              The layout file in <ThemedText type="code">src/app/_layout.tsx</ThemedText> sets up
-              the tab navigator.
-            </ThemedText>
-            <ExternalLink href="https://docs.expo.dev/router/introduction">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
+          <View style={styles.filterItem}>
+            <View style={[styles.filterBadge, { backgroundColor: '#2563EB' }]}>
+              <Text style={styles.filterBadgeText}>1. ปกติ (Normal)</Text>
+            </View>
+            <Text style={styles.filterDesc}>แสดงภาพสดจากกล้องตามธรรมชาติ ไม่มีการปรับแต่งสี</Text>
+          </View>
 
-          <Collapsible title="Android, iOS, and web support">
-            <ThemedView type="backgroundElement" style={styles.collapsibleContent}>
-              <ThemedText type="small">
-                You can open this project on Android, iOS, and the web. To open the web version,
-                press <ThemedText type="smallBold">w</ThemedText> in the terminal running this
-                project.
-              </ThemedText>
-              <Image
-                source={require('@/assets/images/tutorial-web.png')}
-                style={styles.imageTutorial}
-              />
-            </ThemedView>
-          </Collapsible>
+          <View style={styles.filterItem}>
+            <View style={[styles.filterBadge, { backgroundColor: '#4B5563' }]}>
+              <Text style={styles.filterBadgeText}>2. ขาวดำ (Black & White)</Text>
+            </View>
+            <Text style={styles.filterDesc}>ปรับโทนภาพเป็นขาวดำคลาสสิก คอนทราสต์สูง มีเสน่ห์</Text>
+          </View>
 
-          <Collapsible title="Images">
-            <ThemedText type="small">
-              For static images, you can use the <ThemedText type="code">@2x</ThemedText> and{' '}
-              <ThemedText type="code">@3x</ThemedText> suffixes to provide files for different
-              screen densities.
-            </ThemedText>
-            <Image source={require('@/assets/images/react-logo.png')} style={styles.imageReact} />
-            <ExternalLink href="https://reactnative.dev/docs/images">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
+          <View style={styles.filterItem}>
+            <View style={[styles.filterBadge, { backgroundColor: '#D97706' }]}>
+              <Text style={styles.filterBadgeText}>3. สดใส (Vivid Warm)</Text>
+            </View>
+            <Text style={styles.filterDesc}>เพิ่มความอุ่นและสว่างสดใสของสีภาพ ถ่ายคนหรือวิวได้อย่างสวยงาม</Text>
+          </View>
+        </View>
 
-          <Collapsible title="Light and dark mode components">
-            <ThemedText type="small">
-              This template has light and dark mode support. The{' '}
-              <ThemedText type="code">useColorScheme()</ThemedText> hook lets you inspect what the
-              user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-            </ThemedText>
-            <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
+        {/* Section 2: How to submit to GitHub */}
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <Ionicons name="logo-github" size={20} color="#FFFFFF" />
+            <Text style={styles.cardTitle}>ขั้นตอนการอัปโหลดงานขึ้น GitHub</Text>
+          </View>
 
-          <Collapsible title="Animations">
-            <ThemedText type="small">
-              This template includes an example of an animated component. The{' '}
-              <ThemedText type="code">src/components/ui/collapsible.tsx</ThemedText> component uses
-              the powerful <ThemedText type="code">react-native-reanimated</ThemedText> library to
-              animate opening this hint.
-            </ThemedText>
-          </Collapsible>
-        </ThemedView>
-        {Platform.OS === 'web' && <WebBadge />}
-      </ThemedView>
-    </ScrollView>
+          <View style={styles.stepBox}>
+            <Text style={styles.stepNum}>1</Text>
+            <View style={styles.stepInfo}>
+              <Text style={styles.stepTitle}>สร้าง Git Repository</Text>
+              <Text style={styles.stepCode}>git init</Text>
+              <Text style={styles.stepCode}>git add .</Text>
+              <Text style={styles.stepCode}>git commit -m &quot;Complete camera app with filters&quot;</Text>
+            </View>
+          </View>
+
+          <View style={styles.stepBox}>
+            <Text style={styles.stepNum}>2</Text>
+            <View style={styles.stepInfo}>
+              <Text style={styles.stepTitle}>สร้าง Repo บน GitHub แล้ว Push ขึ้นไป</Text>
+              <Text style={styles.stepCode}>git remote add origin https://github.com/USERNAME/expo_cam.git</Text>
+              <Text style={styles.stepCode}>git branch -M main</Text>
+              <Text style={styles.stepCode}>git push -u origin main</Text>
+            </View>
+          </View>
+
+          <View style={styles.stepBox}>
+            <Text style={styles.stepNum}>3</Text>
+            <View style={styles.stepInfo}>
+              <Text style={styles.stepTitle}>คัดลอก URL ของ Repository ไปส่งในเว็บ Classroom</Text>
+              <TouchableOpacity style={styles.linkBtn} onPress={openClassroomUrl}>
+                <Ionicons name="open-outline" size={16} color="#FFFFFF" />
+                <Text style={styles.linkBtnText}>ไปยังหน้าส่งงาน (Week 09)</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+        <Text style={styles.footerText}>Expo SDK 57 • Camera & Filters Project</Text>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-  },
-  contentContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
   container: {
-    maxWidth: MaxContentWidth,
-    flexGrow: 1,
+    flex: 1,
+    backgroundColor: '#09090B',
   },
-  titleContainer: {
-    gap: Spacing.three,
+  scrollContent: {
+    padding: 20,
+    gap: 16,
+  },
+  header: {
     alignItems: 'center',
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.six,
+    paddingVertical: 12,
   },
-  centerText: {
+  headerTitle: {
+    color: '#FFFFFF',
+    fontSize: 22,
+    fontWeight: '700',
+    marginTop: 8,
+  },
+  headerSubtitle: {
+    color: '#A1A1AA',
+    fontSize: 13,
     textAlign: 'center',
+    marginTop: 4,
   },
-  pressed: {
-    opacity: 0.7,
+  card: {
+    backgroundColor: '#18181B',
+    borderRadius: 16,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    gap: 12,
   },
-  linkButton: {
+  cardHeader: {
     flexDirection: 'row',
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.two,
-    borderRadius: Spacing.five,
-    justifyContent: 'center',
-    gap: Spacing.one,
     alignItems: 'center',
+    gap: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
+    paddingBottom: 10,
   },
-  sectionsWrapper: {
-    gap: Spacing.five,
-    paddingHorizontal: Spacing.four,
-    paddingTop: Spacing.three,
+  cardTitle: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '700',
   },
-  collapsibleContent: {
+  filterItem: {
+    gap: 4,
+    marginTop: 4,
+  },
+  filterBadge: {
+    alignSelf: 'flex-start',
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+  },
+  filterBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  filterDesc: {
+    color: '#D4D4D8',
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  stepBox: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 8,
+  },
+  stepNum: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#2563EB',
+    color: '#FFFFFF',
+    fontWeight: '700',
+    fontSize: 14,
+    textAlign: 'center',
+    lineHeight: 28,
+  },
+  stepInfo: {
+    flex: 1,
+    gap: 4,
+  },
+  stepTitle: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  stepCode: {
+    color: '#6EE7B7',
+    backgroundColor: '#09090B',
+    padding: 6,
+    borderRadius: 6,
+    fontFamily: 'monospace',
+    fontSize: 11,
+  },
+  linkBtn: {
+    flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#059669',
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 8,
+    gap: 6,
+    marginTop: 6,
+    alignSelf: 'flex-start',
   },
-  imageTutorial: {
-    width: '100%',
-    aspectRatio: 296 / 171,
-    borderRadius: Spacing.three,
-    marginTop: Spacing.two,
+  linkBtnText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '600',
   },
-  imageReact: {
-    width: 100,
-    height: 100,
-    alignSelf: 'center',
+  footerText: {
+    color: '#52525B',
+    fontSize: 12,
+    textAlign: 'center',
+    marginTop: 12,
   },
 });
