@@ -12,9 +12,9 @@ import {
   View,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import * as MediaLibrary from 'expo-media-library';
 import { FilterOverlay } from './FilterOverlay';
 import { FILTER_OPTIONS, CapturedPhoto, FilterId } from '@/types/camera';
+import { saveToLibraryAsync, useMediaPermissions } from '@/utils/media-library';
 
 interface PhotoPreviewModalProps {
   visible: boolean;
@@ -32,7 +32,7 @@ export const PhotoPreviewModal: React.FC<PhotoPreviewModalProps> = ({
   const [overrideFilter, setOverrideFilter] = useState<FilterId | null>(null);
   const [saving, setSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
-  const [mediaPermission, requestMediaPermission] = MediaLibrary.usePermissions();
+  const [mediaPermission, requestMediaPermission] = useMediaPermissions();
 
   const handleClose = () => {
     setOverrideFilter(null);
@@ -66,8 +66,8 @@ export const PhotoPreviewModal: React.FC<PhotoPreviewModalProps> = ({
             return;
           }
         }
-        await MediaLibrary.saveToLibraryAsync(photo.uri);
       }
+      await saveToLibraryAsync(photo.uri);
       setSavedSuccess(true);
       setTimeout(() => setSavedSuccess(false), 3000);
     } catch (error) {
